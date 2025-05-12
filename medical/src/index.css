@@ -1,0 +1,108 @@
+/* body
+{
+    background-color: bisque;
+}
+.head3
+{
+    color:red;
+} */
+ .header
+ {
+    background-color: #e5e5e5;
+    padding: 20px 0;
+ }
+ 
+ .medicineimg
+ {
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+ }
+
+ .editbtn
+ {
+    color: inherit;
+    text-decoration: none;
+ }
+
+ .deletebtn
+ {
+   margin-right: 20px;
+ }
+
+ .box-1{
+    margin-top: 50px;
+ }
+
+ .box-2{
+   
+ margin-top: 20px;
+}
+
+.total{
+   text-align: right;
+   font-weight: bold;
+}
+
+.treatment-table th,
+.treatment-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.qty-input {
+  width: 80px;
+  padding: 4px;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px; /* space between Delete and Save */
+  justify-content: center;
+}
+
+.btn-delete,
+.btn-save {
+  padding: 5px 12px;
+  border: 1px solid #000;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-delete:hover {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.btn-save:hover {
+  background-color: #d1e7dd;
+  border-color: #198754;
+  color: #198754;
+}
+
+.total-amount {
+  font-weight: bold;
+  text-align: right;
+  margin-top: 10px;
+}
+
+
+.total-row td {
+  background-color: #e9ecef; /* subtle light gray */
+  font-weight: 600;
+  font-size: 16px;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+}
+
+.total-row td:last-child {
+  background-color: transparent;
+  border: none;
+}
+
+.cards{
+  margin-top: 20px;
+}

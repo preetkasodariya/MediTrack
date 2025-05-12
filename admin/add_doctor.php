@@ -1,0 +1,601 @@
+<?php include 'sesstion.php'; ?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from buybootstrap.com/demos/medflex/medflex-admin-dashboard/add-doctors.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Feb 2025 12:37:54 GMT -->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add Dcotor</title>
+
+  <!-- Meta -->
+  <meta name="description" content="Marketplace for Bootstrap Admin Dashboards">
+  <meta property="og:title" content="Admin Templates - Dashboard Templates">
+  <meta property="og:description" content="Marketplace for Bootstrap Admin Dashboards">
+  <meta property="og:type" content="Website">
+  <link rel="shortcut icon" href="assets/images/favicon.svg">
+
+  <!-- *************
+		************ CSS Files *************
+	************* -->
+  <link rel="stylesheet" href="assets/fonts/remix/remixicon.css">
+  <link rel="stylesheet" href="assets/css/main.min.css">
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+
+  <!-- *************
+		************ Vendor Css Files *************
+	************ -->
+
+  <!-- Scrollbar CSS -->
+  <link rel="stylesheet" href="assets/vendor/overlay-scroll/OverlayScrollbars.min.css">
+
+  <!-- Uploader CSS -->
+  <link rel="stylesheet" href="assets/vendor/dropzone/dropzone.min.css">
+
+  <!-- Quill Editor -->
+  <link rel="stylesheet" href="assets/vendor/quill/quill.core.css">
+  <style>
+    .error {
+      color: red;
+      /* font-size: 14px;
+    margin-top: 4px; */
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Page wrapper starts -->
+  <div class="page-wrapper">
+
+    <!-- App header starts -->
+    <?php include 'header.php'; ?>
+    <!-- App header ends -->
+
+    <!-- Main container starts -->
+    <div class="main-container">
+
+      <!-- Sidebar wrapper starts -->
+      <?php include 'sidebar.php'; ?>
+      <!-- Sidebar wrapper ends -->
+
+      <!-- App container starts -->
+      <div class="app-container">
+
+        <!-- App hero header starts -->
+        <div class="app-hero-header d-flex align-items-center">
+
+          <!-- Breadcrumb starts -->
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <i class="ri-home-8-line lh-1 pe-3 me-3 border-end"></i>
+              <a href="doctor_dashboard.php">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item text-primary" aria-current="page">
+              Add Doctor
+            </li>
+          </ol>
+          <!-- Breadcrumb ends -->
+
+          <!-- Sales stats starts -->
+          <div class="ms-auto d-lg-flex d-none flex-row">
+            <div class="d-flex flex-row gap-1 day-sorting">
+              <button class="btn btn-sm btn-primary"><a href="view_doctor.php" style="color: inherit;">Back</a></button>
+
+            </div>
+          </div>
+          <!-- Sales stats ends -->
+
+        </div>
+        <!-- App Hero header ends -->
+
+        <!-- App body starts -->
+        <div class="app-body">
+
+          <!-- Row starts -->
+          <div class="row gx-3">
+            <div class="col-xl-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title">Add Doctor</h5>
+                </div>
+                <div class="card-body">
+
+                  <!-- Custom tabs starts -->
+                  <!-- <div class="custom-tabs-container"> -->
+
+                  <!-- Tab content starts -->
+                  <div class="tab-content h-350">
+                    <div class="tab-pane fade show active" id="oneA" role="tabpanel">
+                      <?php
+                      if (isset($_POST["btnsubmit"])) {
+                        $fname = $_POST["firstname"];
+                        $lname = $_POST["lastname"];
+                        $age = $_POST["doc_age"];
+                        $docgender = $_POST["doc_gender"];
+                        $hname = $_POST["hos_name"];
+                        $hnum = $_POST["hos_num"];
+                        $docnum = $_POST["doc_num"];
+                        $docemail = $_POST["doc_email"];
+                        $uname = $_POST["user_name"];
+                        $pwd = $_POST["pass"];
+                        $docisactive = $_POST["is_active"];
+                        $aboutdoc = $_POST["abdoc"];
+                        $add = $_POST["address"];
+                        $pincode = $_POST["pcode"];
+                        $cityid = $_POST["cid"];
+
+                        $ext = pathinfo($_FILES["img"]["name"], PATHINFO_EXTENSION);
+                        $filename = time() . random_int(1111, 9999) . "." . $ext;  //67655566.png
+                        move_uploaded_file($_FILES["img"]["tmp_name"], "uploads/doctor/" . $filename);
+
+                        $sql = mysqli_query($conn, "SELECT * FROM tbl_doctors WHERE  doc_number='$docnum' OR doc_email='$docemail' OR username='$uname'") or die(mysqli_error($conn));
+                        $row = mysqli_fetch_assoc($sql);
+
+                        if (mysqli_num_rows($sql) <= 0) {
+
+                          $result = mysqli_query($conn, "insert into tbl_doctors (doc_image,hospital_name,hospital_number,doc_number,doc_email,username,password,isactive,about_doctors,address,pincode,city_id,first_name,last_name,age,gender) 
+                            values ('$filename','$hname','$hnum','$docnum','$docemail','$uname','$pwd','$docisactive','$aboutdoc','$add','$pincode','$cityid','$fname','$lname','$age','$docgender')") or die(mysqli_error($conn));
+
+
+                          if ($result) {
+                      ?>
+                            <div class="alert bg-primary text-white alert-dismissible fade show" role="alert">
+                              Data Inserted!
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                              <?php echo "<script>window.location='view_doctor.php'</script>"; ?>
+                            </div>
+
+                          <?php
+                          } else {
+                          ?>
+                            <div class="alert bg-danger text-white alert-dismissible fade show" role="alert">
+                              Data Not Inserted!
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+
+                      <?php
+                          }
+                        } else {
+
+                          if ($row['doc_number'] == $docnum) {
+                            echo '<div class="alert bg-danger text-white alert-dismissible fade show" role="alert">Number Already Exists!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                          }
+                          if ($row['doc_email'] == $docemail) {
+                            echo '<div class="alert bg-danger text-white alert-dismissible fade show" role="alert">Email Already Exists!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                          }
+                          if ($row['username'] == $uname) {
+                            echo '<div class="alert bg-danger text-white alert-dismissible fade show" role="alert">Username Already Exists!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                          }
+                        }
+                      }
+
+                      ?>
+
+
+                      <form method="post" enctype="multipart/form-data" id="docform">
+                        <!-- Row starts -->
+                        <div class="row gx-12">
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a1">Upload Photo<span class="text-danger">*</span></label>
+                              <input type="file" class="form-control" name="img" id="img" placeholder="Enter First Name">
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a1">First Name <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter First Name">
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a2">Last Name <span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Enter Last Name">
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a2">Age<span class="text-danger">*</span></label>
+                              <input type="number" class="form-control" name="doc_age" id="doc_age" placeholder="Enter Age">
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="selectGender1">Gender<span
+                                  class="text-danger">*</span></label>
+                              <div class="m-0">
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="doc_gender"
+                                    id="doc_gender" value="male">
+                                  <label class="form-check-label">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="doc_gender"
+                                    id="doc_gender" value="female">
+                                  <label class="form-check-label">Female</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a6">Mobile Number <span
+                                  class="text-danger">*</span></label>
+                              <input type="text" class="form-control" name="doc_num" id="doc_num" placeholder="Enter Mobile Number">
+                            </div>
+                          </div>
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a6">Alternative Mobile Number<span
+                                  class="text-danger">*</span></label>
+                              <input type="text" class="form-control" name="hos_num" id="hos_num" placeholder="Enter Hospital Mobile Number">
+                            </div>
+                          </div>
+                          
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a5">Email ID <span class="text-danger">*</span></label>
+
+                              <input type="email" class="form-control" name="doc_email" id="doc_email" placeholder="Enter Email ID">
+
+                            </div>
+                          </div>
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a2">Doctor Qualification<span class="text-danger">*</span></label>
+                              <input type="text" class="form-control" name="hos_name" id="hos_name" placeholder="Enter Hospital Name">
+                            </div>
+                          </div>
+
+
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a8">About Doctor</label>
+                              <textarea name="abdoc" id="abdoc" placeholder="About Doctor" class="form-control"></textarea>
+                            </div>
+                          </div>
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label">Is Active?<span
+                                  class="text-danger">*</span></label>
+                              <div class="m-0">
+                                <input class="form-check-input" type="radio" name="is_active"
+                                  id="is_active" value="yes">
+                                <label class="form-check-label">Yes</label>
+                                <input class="form-check-input" type="radio" name="is_active"
+                                  id="is_active" value="no">
+                                <label class="form-check-label">No</label>
+                              </div>
+                            </div>
+                          </div>
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a14">City</label>
+                              <select class="form-control" name="cid" id="cid" style="width:100%;">
+                                <option value="">Select city</option>
+                                <?php
+                                $result = mysqli_query($conn, "select * from tbl_city") or die(mysqli_error($conn));
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                ?>
+                                  <option value="<?php echo $row["city_id"]; ?>"><?php echo $row["city_name"]; ?></option>
+                                <?php
+                                }
+                                ?>
+                              </select>
+
+                            </div>
+                          </div>
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a11">Address</label>
+                              <textarea name="address" id="address" placeholder="About Doctor" class="form-control"></textarea>
+                            </div>
+                          </div>
+
+
+
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="a15">Postal Code</label>
+                              <input type="text" class="form-control" name="pcode" id="pcode" placeholder="Enter Postal Code">
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="u1">User Name</label>
+                              <input type="text" name="user_name" id="user_name" placeholder="Enter username" class="form-control">
+                            </div>
+                          </div>
+
+                          <div class="col-sm-12">
+                            <div class="mb-3">
+                              <label class="form-label" for="u2">Password</label>
+                              <div class="input-group">
+                              <input type="password" name="pass" id="pass" class="form-control"
+                                placeholder="Password must be 8-20 characters long.">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                                <i class="ri-eye-line text-primary" id="eyeIcon"></i>
+                            </button></div>
+
+                            </div>
+                          </div>
+                          <div class="d-flex gap-2 justify-content-end mt-4">
+                            <button type="submit" name="btnsubmit" class="btn btn-primary">
+                              Submit
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Row ends -->
+                      </form>
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                </div>
+              </div>
+              <!-- Row ends -->
+
+              <?php include 'footer.php'; ?>
+            </div>
+            <!-- App body ends -->
+            <!-- App footer starts -->
+
+            <!-- App footer ends -->
+
+          </div>
+          <!-- App container ends -->
+        </div>
+
+      </div>
+      <!-- Main container ends -->
+
+    </div>
+    <!-- Page wrapper ends -->
+
+    <!-- *************
+			************ JavaScript Files *************
+		************* -->
+    <!-- Required jQuery first, then Bootstrap Bundle JS -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+
+    <!-- *************
+			************ Vendor Js Files *************
+		************* -->
+
+    <!-- Overlay Scroll JS -->
+    <script src="assets/vendor/overlay-scroll/jquery.overlayScrollbars.min.js"></script>
+    <script src="assets/vendor/overlay-scroll/custom-scrollbar.js"></script>
+
+    <!-- Dropzone JS -->
+    <script src="assets/vendor/dropzone/dropzone.min.js"></script>
+
+    <!-- Quill Editor JS -->
+    <script src="assets/vendor/quill/quill.min.js"></script>
+    <script src="assets/vendor/quill/custom.js"></script>
+
+    <!-- Custom JS files -->
+    <script src="assets/js/custom.js"></script>
+    
+    <!-- jQuery (needed for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="assets/js/jquery.validate.min.js"></script>
+    <script src="assets/js/additional-methods.min.js"></script>
+
+
+    <script>
+      $(document).ready(function() {
+
+        $("#docform").validate({
+
+          rules: {
+            img: {
+              required: true
+            },
+
+            firstname: {
+              required: true
+            },
+
+            lastname: {
+              required: true
+            },
+
+            doc_age: {
+              required: true
+            },
+
+            doc_gender: {
+              required: true
+            },
+
+            doc_num: {
+              required: true,
+              maxlength: 10,
+              minlength: 10,
+            },
+
+            doc_email: {
+              required: true,
+              email: true
+            },
+
+            hos_name: {
+              required: true
+            },
+
+            hos_num: {
+              required: true,
+              maxlength: 10,
+              minlength: 10,
+            },
+
+            abdoc: {
+              required: true
+            },
+
+            address: {
+              required: true
+            },
+
+            cid: {
+              required: true
+            },
+
+            pcode: {
+              required: true,
+              maxlength: 6,
+              minlength: 6,
+            },
+
+            user_name: {
+              required: true
+            },
+            pass: {
+              required: true,
+              minlength: 8,
+              maxlength: 14,
+              pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,14}$/
+            },
+
+            is_active: {
+              required: true,
+            },
+
+
+          },
+
+          messages: {
+            img: {
+              required: "Upload your Images",
+            },
+
+            firstname: {
+              required: "Enter Your First Name",
+            },
+
+            lastname: {
+              required: "Enter Your Last Name",
+            },
+
+            doc_age: {
+              required: "Age is required",
+            },
+
+            doc_gender: {
+              required: "Gender Is required",
+            },
+
+            doc_num: {
+              required: "Enter Your contact info",
+            },
+
+            doc_email: {
+              required: "Enter Your Email",
+
+            },
+
+            hos_name: {
+              required: "Enter Your Hospital name",
+            },
+
+            hos_num: {
+              required: "Hospital number is required",
+            },
+
+            abdoc: {
+              required: "About doctor field is required",
+            },
+
+            address: {
+              required: "Enter Your Address",
+            },
+
+            cid: {
+              required: "Enter Your City",
+            },
+
+            pcode: {
+              required: "Enter Your Pincode",
+            },
+
+            user_name: {
+              required: "Enter Your User Name",
+            },
+            pass: {
+              required: "Please enter a password",
+              minlength: "Password must be at least 8 characters",
+              maxlength: "Password must not exceed 14 characters",
+              pattern: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+            },
+
+            is_active: {
+              required: "Enter Your City Name",
+            },
+          }
+
+        });
+
+      });
+    </script>
+    <script>
+      $(document).ready(function() {
+        $('#cid').select2({
+          placeholder: "Select city",
+          allowClear: true
+        });
+      });
+    </script>
+      <script>
+        function togglePassword() {
+            const pwdInput = document.getElementById('pass');
+            const icon = document.getElementById('eyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                icon.classList.replace('ri-eye-line', 'ri-eye-off-line');
+            } else {
+                pwdInput.type = 'password';
+                icon.classList.replace('ri-eye-off-line', 'ri-eye-line');
+            }
+        }
+
+    </script>
+
+</body>
+
+
+<!-- Mirrored from buybootstrap.com/demos/medflex/medflex-admin-dashboard/add-doctors.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Feb 2025 12:38:00 GMT -->
+
+</html>
